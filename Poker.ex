@@ -60,6 +60,12 @@ defmodule Poker do
 	}
 
 	def deal([]), do: raise ArgumentError, message: "the argument value is invalid"
+
+	# Sort the converted list-of-tuples base on their rank
+	def sort_by_rank do
+		# TODO - Ishak will do this ...
+	end
+	
 	# def deal(hd list) do:
 		# if (length(list) + 1) == 10 do
 
