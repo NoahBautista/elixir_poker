@@ -69,6 +69,13 @@ defmodule Poker do
 	# def deal(hd list) do:
 		# if (length(list) + 1) == 10 do
 
+	def convert(list) do
+		Enum.each(list, fn n ->
+		  case n do
+		    [{x,y}] ->IO.puts "#{x} #{y}"
+		  end
+		end)        
+	end
 end
 
 # Main array passed into function
