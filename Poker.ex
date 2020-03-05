@@ -66,14 +66,23 @@ defmodule Poker do
 		# TODO - Ishak will do this ...
 	end
 	
-	# Poker.convert([40,47,50,52])
+	# Poker.convert([40,47,50,52,1])
+	# Poker.convert([52,51,50,49,40])
 	def convert(list) do
-		Enum.map(list, fn n -> Map.fetch(@card_map, n) end) |>
+		result = Enum.map(list, fn n -> Map.fetch(@card_map, n) end) |>
 		Enum.map(fn n ->
 		  case n do
 		  	{_,y} -> y
 		  end
-		end) 
+		end)
+		is_RoyalFlush(result)
+	end
+
+	def is_RoyalFlush(list) do
+		type = elem((hd list), 1) 
+		Enum.all?(list, fn({_x,y}) -> y == type end) and Enum.any?(list, fn({x,_y}) -> x == 13 end) and
+		Enum.any?(list, fn({x,_y}) -> x == 12 end) and Enum.any?(list, fn({x,_y}) -> x == 11 end) and
+		Enum.any?(list, fn({x,_y}) -> x == 10 end) and Enum.any?(list, fn({x,_y}) -> x == 1 end)
 	end
 end
 
