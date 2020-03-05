@@ -1,3 +1,4 @@
+
 defmodule Poker do
 
 	@card_map %{
@@ -59,7 +60,17 @@ defmodule Poker do
 		52 => {13, "S"},	# King
 	}
 	
-	def deal([]), do: raise ArgumentError, message: "the argument value is invalid"
+	def deal(list) do
+		result = split_list(list)
+		l1 = elem(result, 1) |> convert()
+		l2 = elem(result, 0) |> convert()
+
+	end
+
+	def split_list(list) do
+		require Integer
+		list |> Enum.partition(&Integer.is_even/1)
+	end
 
 	# Sort the converted list-of-tuples base on their rank
 	def sort_by_rank do
@@ -75,7 +86,7 @@ defmodule Poker do
 		  	{_,y} -> y
 		  end
 		end)
-		is_RoyalFlush(result)
+		#is_RoyalFlush(result)
 	end
 
 	def is_RoyalFlush(list) do
