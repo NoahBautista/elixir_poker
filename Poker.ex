@@ -58,7 +58,7 @@ defmodule Poker do
 		51 => {12, "S"},	# Queen
 		52 => {13, "S"},	# King
 	}
-
+	
 	def deal([]), do: raise ArgumentError, message: "the argument value is invalid"
 
 	# Sort the converted list-of-tuples base on their rank
@@ -66,15 +66,14 @@ defmodule Poker do
 		# TODO - Ishak will do this ...
 	end
 	
-	# def deal(hd list) do:
-		# if (length(list) + 1) == 10 do
-
+	# Poker.convert([40,47,50,52])
 	def convert(list) do
-		Enum.each(list, fn n ->
+		Enum.map(list, fn n -> Map.fetch(@card_map, n) end) |>
+		Enum.map(fn n ->
 		  case n do
-		    [{x,y}] ->IO.puts "#{x} #{y}"
+		  	{_,y} -> y
 		  end
-		end)        
+		end) 
 	end
 end
 
