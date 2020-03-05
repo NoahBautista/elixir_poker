@@ -63,7 +63,7 @@ defmodule Poker do
 	def deal(list) do
 		result = split_list(list)
 		l1 = elem(result, 1) |> convert()
-		l2 = elem(result, 0) |> convert()
+		l2 = elem(result, 0) |> convert() 
 
 	end
 
@@ -73,11 +73,11 @@ defmodule Poker do
 	end
 
 	# Sort the converted list-of-tuples base on their rank
-	def sort_by_rank do
+	def sort_by_rank(list) do
 		# TODO - Ishak will do this ...
 	end
 	
-	# Poker.convert([40,47,50,52,1])
+	# Poker.convert([40,47,50,52,1,52,51,50,49,40])
 	# Poker.convert([52,51,50,49,40])
 	def convert(list) do
 		result = Enum.map(list, fn n -> Map.fetch(@card_map, n) end) |>
@@ -95,6 +95,16 @@ defmodule Poker do
 		Enum.any?(list, fn({x,_y}) -> x == 12 end) and Enum.any?(list, fn({x,_y}) -> x == 11 end) and
 		Enum.any?(list, fn({x,_y}) -> x == 10 end) and Enum.any?(list, fn({x,_y}) -> x == 1 end)
 	end
+	#  Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {46,"S"}])
+	#  Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	def is_straightFlush(list) do
+		type = elem((hd list), 1) 
+		rank = elem((hd list), 0)
+		Enum.all?(list, fn({_x,y}) -> y == type end) and Enum.any?(list, fn({x,_y}) -> x == rank end) and
+		Enum.any?(list, fn({x,_y}) -> x == (rank-1) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-2) end) and
+		Enum.any?(list, fn({x,_y}) -> x == (rank-3) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-4) end)
+	end
+
 end
 
 # Main array passed into function
