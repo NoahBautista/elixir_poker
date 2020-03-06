@@ -59,17 +59,13 @@ defmodule Poker do
 		51 => {12, "S"},	# Queen
 		52 => {13, "S"},	# King
 	}
-	
+	# Poker.deal([1,2,1,41,1,15,1,28,1,52])
 	def deal(list) do
-		result = split_list(list)
-		l1 = elem(result, 1) |> convert()
-		l2 = elem(result, 0) |> convert() 
-
-	end
-
-	def split_list(list) do
-		require Integer
-		list |> Enum.partition(&Integer.is_even/1)
+		temp = Enum.zip(1..10, list) 
+		second = Enum.filter(temp, fn{x,_y} -> (rem x, 2) == 0 end) |> convert()
+		first = Enum.filter(temp, fn{x,_y} -> (rem x, 2) != 0 end) |> convert()
+		is_fourofkind(first)
+		is_fourofkind(second)
 	end
 
 	# Sort the converted list-of-tuples base on their rank
@@ -80,10 +76,10 @@ defmodule Poker do
 	# Poker.convert([40,47,50,52,1,52,51,50,49,40])
 	# Poker.convert([52,51,50,49,40])
 	def convert(list) do
-		result = Enum.map(list, fn n -> Map.fetch(@card_map, n) end) |>
+		Enum.map(list, fn {_x,y} -> Map.fetch(@card_map, y) end) |>
 		Enum.map(fn n ->
 		  case n do
-		  	{_,y} -> y
+		  	{_x,y} -> y
 		  end
 		end)
 		#is_RoyalFlush(result)
@@ -105,8 +101,18 @@ defmodule Poker do
 		Enum.any?(list, fn({x,_y}) -> x == (rank-3) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-4) end)
 	end
 
+	def is_fourofkind(list) do
+		 
+		 Enum.map(list, fn n -> 
+			case n do
+				{x, _y} -> x
+			end
+		end) 
+		|>  Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) 
+		|>  Enum.any?( fn({_x,y}) -> y == 4 end)
+	end
 end
-
+# [1, 2, :a, 2, :a, :b, :a] |> Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) |>  Enum.sort()
 # Main array passed into function
 # 	1) Seperate into two different arrays, evens - odds
 #   2) Use map to convert cards in int to string format
