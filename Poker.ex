@@ -59,9 +59,20 @@ defmodule Poker do
 		51 => {12, "S"},	# Queen
 		52 => {13, "S"},	# King
 	}
+
+	# Temporary (for testing purposes)
+	def card_map do
+		@card_map
+	end
+
 	# Poker.deal([1,2,1,41,1,15,1,28,1,52])
 	def deal(list) do
 		temp = Enum.zip(1..10, list) 
+		# @noah – Consider using Enum.drop_every(numerable, nth)
+		# See: https://hexdocs.pm/elixir/Enum.html#drop_every/2
+		# Ex:
+		# second = Enum.drop_every(list, 2)
+		# first = list -- second
 		second = Enum.filter(temp, fn{x,_y} -> (rem x, 2) == 0 end) |> convert()
 		first = Enum.filter(temp, fn{x,_y} -> (rem x, 2) != 0 end) |> convert()
 		is_fourofkind(first)
@@ -75,13 +86,9 @@ defmodule Poker do
 	
 	# Poker.convert([40,47,50,52,1,52,51,50,49,40])
 	# Poker.convert([52,51,50,49,40])
+	# Poker.convert([1, 15,29,43])
 	def convert(list) do
-		Enum.map(list, fn {_x,y} -> Map.fetch(@card_map, y) end) |>
-		Enum.map(fn n ->
-		  case n do
-		  	{_x,y} -> y
-		  end
-		end)
+		Enum.map(list, fn y -> @card_map[y] end)
 		#is_RoyalFlush(result)
 	end
 
