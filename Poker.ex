@@ -82,8 +82,8 @@ defmodule Poker do
 	# Sort the converted list-of-tuples base on their rank
 	def sort_by_rank(list) do
 		Enum.sort(list, fn (a, b) -> 
-			{a_rank, a_suit} = a
-			{b_rank, b_suit} = b
+			{a_rank, _} = a
+			{b_rank, _} = b
 			a_rank <= b_rank
 		 end)
 	end
@@ -91,8 +91,8 @@ defmodule Poker do
 	# Sort the converted list-of-tuples base on their suit
 	def sort_by_suit(list) do
 		Enum.sort(list, fn (a, b) -> 
-			{a_rank, a_suit} = a
-			{b_rank, b_suit} = b
+			{_, a_suit} = a
+			{_, b_suit} = b
 			a_suit <= b_suit
 		 end)
 	end
