@@ -81,12 +81,25 @@ defmodule Poker do
 
 	# Sort the converted list-of-tuples base on their rank
 	def sort_by_rank(list) do
-		# TODO - Ishak will do this ...
+		Enum.sort(list, fn (a, b) -> 
+			{a_rank, a_suit} = a
+			{b_rank, b_suit} = b
+			a_rank <= b_rank
+		 end)
+	end
+
+	# Sort the converted list-of-tuples base on their suit
+	def sort_by_suit(list) do
+		Enum.sort(list, fn (a, b) -> 
+			{a_rank, a_suit} = a
+			{b_rank, b_suit} = b
+			a_suit <= b_suit
+		 end)
 	end
 	
 	# Poker.convert([40,47,50,52,1,52,51,50,49,40])
 	# Poker.convert([52,51,50,49,40])
-	# Poker.convert([1, 15,29,43])
+	# Poker.convert([1,15,29,43])
 	def convert(list) do
 		Enum.map(list, fn y -> @card_map[y] end)
 		#is_RoyalFlush(result)
