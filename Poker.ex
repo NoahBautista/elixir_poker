@@ -96,6 +96,36 @@ defmodule Poker do
 			a_suit <= b_suit
 		 end)
 	end
+
+	# Returns a Map containing the # of cards per suit
+	# Poker.number_of_cards_per_suit([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	# Poker.number_of_cards_per_suit([{1, "C"}, {2, "D"}, {3, "H"}, {4, "S"}])
+	# Poker.number_of_cards_per_suit([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	def number_of_cards_per_suit(list) do
+		# Create a List of all of suits in the hand (keep the duplicates)
+		suits = Enum.map(list, fn(elem) ->
+			{_, suit} = elem
+			suit
+		end)
+		# Create a Map where each key is the suit, 
+		# and the value is the number of cards (in the hand) with that suit
+		Enum.frequencies(suits)
+	end
+
+	# Returns a Map containing the # of cards per rank
+	# Poker.number_of_cards_per_suit([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	# Poker.number_of_cards_per_suit([{1, "C"}, {2, "D"}, {3, "H"}, {4, "S"}])
+	# Poker.number_of_cards_per_suit([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	def number_of_cards_per_rank(list) do
+		# Create a List of all of ranks in the hand (keep the duplicates)
+		ranks = Enum.map(list, fn(elem) ->
+			{rank, _} = elem
+			rank
+		end)
+		# Create a Map where each key is the rank, 
+		# and the value is the number of cards (in the hand) with that rank
+		Enum.frequencies(ranks)
+	end
 	
 	# Poker.convert([40,47,50,52,1,52,51,50,49,40])
 	# Poker.convert([52,51,50,49,40])
