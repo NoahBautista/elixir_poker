@@ -211,7 +211,18 @@ defmodule Poker do
 		has_five = Enum.any?(frequency_list, fn(elem) -> elem == 5 end)
 	end
 
-	
+	# Determine if a given hand is a Three Of A Kind
+	# Poker.is_three_of_a_kind?([{9, "C"}, {9, "D"}, {9, "H"}, {3, "S"}, {4, "C"}])
+	# Poker.is_three_of_a_kind?([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	# Poker.is_three_of_a_kind?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	def is_three_of_a_kind?(list) do
+		# Determine the number of cards (that exist) for each rank
+		cards_per_rank = number_of_cards_per_rank(list)
+		# Get a List of the frequency of each rank
+		frequency_list = Map.values(cards_per_rank)
+		# Return true if any rank has a frequency of 3
+		_has_three = Enum.any?(frequency_list, fn(elem) -> elem == 3 end)
+	end
 
 
 
