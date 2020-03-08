@@ -208,7 +208,7 @@ defmodule Poker do
 		frequency_list = Map.values(frequency_per_suit)
 
 		# Return true if one suit has a frequency of 5
-		has_five = Enum.any?(frequency_list, fn(elem) -> elem == 5 end)
+		_has_five = Enum.any?(frequency_list, fn(elem) -> elem == 5 end)
 	end
 
 	# Determine if a given hand is a Three Of A Kind
