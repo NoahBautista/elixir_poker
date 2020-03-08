@@ -65,35 +65,79 @@ defmodule Poker do
 		@card_map
 	end
 
-	# Poker.deal([1,2,1,41,1,15,1,28,1,52])
+	# Poker.deal([1,52,20,48,52,50,31,49,51,39])
 	def deal(list) do
 		temp = Enum.zip(1..10, list) 
 		# @noah – Consider using Enum.drop_every(numerable, nth)
 		# See: https://hexdocs.pm/elixir/Enum.html#drop_every/2
 		# Ex:
-		# second = Enum.drop_every(list, 2)
-		# first = list -- second
-		second = Enum.filter(temp, fn{x,_y} -> (rem x, 2) == 0 end) |> convert()
-		first = Enum.filter(temp, fn{x,_y} -> (rem x, 2) != 0 end) |> convert()
-		is_fourofkind(first)
-		is_fourofkind(second)
+		second = Enum.drop_every(list, 2) |> convert |> sort_by_rank
+		first = list -- second |> convert |> sort_by_rank
+
+
+		# second = Enum.filter(temp, fn{x,_y} -> (rem x, 2) == 0 end) |> convert()
+		# first = Enum.filter(temp, fn{x,_y} -> (rem x, 2) != 0 end) |> convert()
+		#v1 = hand_rank(first)
+		#v2 = hand_rank(second)
+
+		f2 = (
+			if is_RoyalFlush?(second) do
+				1
+			else
+				if is_straightFlush?(second) do
+					2
+				else		
+					if is_four_of_a_kind?(second) do
+						3
+					else
+						if is_full_house?(second) do
+							4
+						else		
+							if is_flush?(second) do
+								5
+							else
+								if is_straight?(second) do
+									6
+								else
+									if is_three_of_a_kind?(second) do
+										7
+									else
+										if is_two_pairs?(second) do
+											8
+										else
+											if is_one_pair?(second) do
+												9
+											else
+												#none of the other options
+												10
+											end
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		)
+		# second
 	end
 
-	# Sort the converted list-of-tuples base on their rank
 	def sort_by_rank(list) do
+	# Sort the converted list-of-tuples base on their rank - Desc order
 		Enum.sort(list, fn (a, b) -> 
 			{a_rank, _} = a
 			{b_rank, _} = b
-			a_rank <= b_rank
+			a_rank >= b_rank
 		 end)
 	end
 
-	# Sort the converted list-of-tuples base on their suit
+	# Sort the converted list-of-tuples base on their suit - Asc order
 	def sort_by_suit(list) do
 		Enum.sort(list, fn (a, b) -> 
 			{_, a_suit} = a
 			{_, b_suit} = b
-			a_suit <= b_suit
+			a_suit >= b_suit
 		 end)
 	end
 
@@ -132,10 +176,9 @@ defmodule Poker do
 	# Poker.convert([1,15,29,43])
 	def convert(list) do
 		Enum.map(list, fn y -> @card_map[y] end)
-		#is_RoyalFlush(result)
 	end
 
-	def is_RoyalFlush(list) do
+	def is_RoyalFlush?(list) do
 		type = elem((hd list), 1) 
 		Enum.all?(list, fn({_x,y}) -> y == type end) and Enum.any?(list, fn({x,_y}) -> x == 13 end) and
 		Enum.any?(list, fn({x,_y}) -> x == 12 end) and Enum.any?(list, fn({x,_y}) -> x == 11 end) and
@@ -144,23 +187,19 @@ defmodule Poker do
 
 	#  Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {46,"S"}])
 	#  Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
-	def is_straightFlush(list) do
+	def is_straightFlush?(list) do
 		type = elem((hd list), 1) 
 		rank = elem((hd list), 0)
 		Enum.all?(list, fn({_x,y}) -> y == type end) and Enum.any?(list, fn({x,_y}) -> x == rank end) and
 		Enum.any?(list, fn({x,_y}) -> x == (rank-1) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-2) end) and
-		Enum.any?(list, fn({x,_y}) -> x == (rank-3) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-4) end)
+		Enum.any?(list, fn({x,_y}) -> x == (rank-3) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-4) end) 
 	end
 
-	def is_fourofkind(list) do
-		 
-		Enum.map(list, fn n -> 
-			case n do
-				{x, _y} -> x
-			end
-		end) 
-		|>  Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) 
-		|>  Enum.any?( fn({_x,y}) -> y == 4 end)
+	def is_straight?(list) do
+		rank = elem((hd list), 0)
+		Enum.any?(list, fn({x,_y}) -> x == rank end) and
+		Enum.any?(list, fn({x,_y}) -> x == (rank-1) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-2) end) and
+		Enum.any?(list, fn({x,_y}) -> x == (rank-3) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-4) end) 
 	end
 
 	# Determine if a given hand is a Four Of A Kind
@@ -169,9 +208,9 @@ defmodule Poker do
 	# Poker.is_four_of_a_kind?([{1, "C"}, {2, "D"}, {3, "H"}, {4, "S"}])
 	def is_four_of_a_kind?(list) do
 		# Determine the number of cards (that exist) for each suit
-		cards_per_suit = number_of_cards_per_suit(list)
+		cards_per_rank = number_of_cards_per_rank(list)
 		# Get a List of the frequency of each suit
-		frequency_list = Map.values(cards_per_suit)
+		frequency_list = Map.values(cards_per_rank)
 		# Return true if any suit has a frequency equal to (or greater than) 4
 		Enum.any?(frequency_list, fn(elem) -> 
 			elem >= 4
@@ -209,6 +248,7 @@ defmodule Poker do
 
 		# Return true if one suit has a frequency of 5
 		_has_five = Enum.any?(frequency_list, fn(elem) -> elem == 5 end)
+		Enum
 	end
 
 	# Determine if a given hand is a Three Of A Kind
@@ -242,8 +282,19 @@ defmodule Poker do
 		length_of_two_list == 2
 	end
 
+	def is_one_pair?(list) do
+		# Determine the number of cards (that exist) for each rank
+		cards_per_rank = number_of_cards_per_rank(list)
+		# Get a List of the frequency of each rank
+		frequency_list = Map.values(cards_per_rank)
 
-
+		# Store every instance of 2 (in the frequency List)
+		two_list = Enum.filter(frequency_list, fn(elem) -> elem == 2 end)
+		# Determine the length of the List
+		length_of_two_list = Enum.count(two_list)
+		# Return true if the length of the List is 2
+		length_of_two_list == 1
+	end
 end
 # [1, 2, :a, 2, :a, :b, :a] |> Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) |>  Enum.sort()
 # Main array passed into function
