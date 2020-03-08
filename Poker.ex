@@ -97,10 +97,10 @@ defmodule Poker do
 		 end)
 	end
 
-	# Returns a Map containing the # of cards per suit
+	# Returns a Map containing the # of cards per suit; Example: %{"C" => 1, "S" => 4}
+	# Poker.number_of_cards_per_suit([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
 	# Poker.number_of_cards_per_suit([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
 	# Poker.number_of_cards_per_suit([{1, "C"}, {2, "D"}, {3, "H"}, {4, "S"}])
-	# Poker.number_of_cards_per_suit([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
 	def number_of_cards_per_suit(list) do
 		# Create a List of all of suits in the hand (keep the duplicates)
 		suits = Enum.map(list, fn(elem) ->
@@ -112,10 +112,10 @@ defmodule Poker do
 		Enum.frequencies(suits)
 	end
 
-	# Returns a Map containing the # of cards per rank
+	# Returns a Map containing the # of cards per rank; Example: %{1 => 2, 8 => 1, 11 => 1, 13 => 1}
+	# Poker.number_of_cards_per_suit([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
 	# Poker.number_of_cards_per_suit([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
 	# Poker.number_of_cards_per_suit([{1, "C"}, {2, "D"}, {3, "H"}, {4, "S"}])
-	# Poker.number_of_cards_per_suit([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
 	def number_of_cards_per_rank(list) do
 		# Create a List of all of ranks in the hand (keep the duplicates)
 		ranks = Enum.map(list, fn(elem) ->
@@ -141,6 +141,7 @@ defmodule Poker do
 		Enum.any?(list, fn({x,_y}) -> x == 12 end) and Enum.any?(list, fn({x,_y}) -> x == 11 end) and
 		Enum.any?(list, fn({x,_y}) -> x == 10 end) and Enum.any?(list, fn({x,_y}) -> x == 1 end)
 	end
+
 	#  Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {46,"S"}])
 	#  Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
 	def is_straightFlush(list) do
