@@ -197,6 +197,22 @@ defmodule Poker do
 		has_three and has_two
 	end
 
+	# Determine if a given hand is a Flush
+	# Poker.is_flush?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	# Poker.is_flush?([{9, "C"}, {9, "D"}, {9, "H"}, {4, "S"}, {4, "C"}])
+	# Poker.is_flush?([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	def is_flush?(list) do
+		# Determine the number of cards (that exist) for each rank
+		frequency_per_suit = number_of_cards_per_suit(list)
+		# Get a List containing the frequency of each suit
+		frequency_list = Map.values(frequency_per_suit)
+
+		# Return true if one suit has a frequency of 5
+		has_five = Enum.any?(frequency_list, fn(elem) -> elem == 5 end)
+	end
+
+	
+
 
 
 end
