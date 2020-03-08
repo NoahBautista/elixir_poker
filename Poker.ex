@@ -224,6 +224,24 @@ defmodule Poker do
 		_has_three = Enum.any?(frequency_list, fn(elem) -> elem == 3 end)
 	end
 
+	# Determine if a given hand is a Two Pairs
+	# Poker.is_two_pairs?([{9, "C"}, {9, "D"}, {3, "H"}, {3, "S"}, {4, "C"}])
+	# Poker.is_two_pairs?([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	# Poker.is_two_pairs?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	def is_two_pairs?(list) do
+		# Determine the number of cards (that exist) for each rank
+		cards_per_rank = number_of_cards_per_rank(list)
+		# Get a List of the frequency of each rank
+		frequency_list = Map.values(cards_per_rank)
+
+		# Store every instance of 2 (in the frequency List)
+		two_list = Enum.filter(frequency_list, fn(elem) -> elem == 2 end)
+		# Determine the length of the List
+		length_of_two_list = Enum.count(two_list)
+		# Return true if the length of the List is 2
+		length_of_two_list == 2
+	end
+
 
 
 end
