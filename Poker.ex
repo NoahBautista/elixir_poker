@@ -154,7 +154,7 @@ defmodule Poker do
 
 	def is_fourofkind(list) do
 		 
-		 Enum.map(list, fn n -> 
+		Enum.map(list, fn n -> 
 			case n do
 				{x, _y} -> x
 			end
@@ -162,6 +162,22 @@ defmodule Poker do
 		|>  Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) 
 		|>  Enum.any?( fn({_x,y}) -> y == 4 end)
 	end
+
+	# Determine if a given hand is a Four Of A Kind
+	# Poker.is_four_of_a_kind?([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	# Poker.is_four_of_a_kind?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	# Poker.is_four_of_a_kind?([{1, "C"}, {2, "D"}, {3, "H"}, {4, "S"}])
+	def is_four_of_a_kind?(list) do
+		# Determine the number of cards (that exist) for each suit
+		cards_per_suit = number_of_cards_per_suit(list)
+		# Get a List of the frequency of each suit
+		frequency_list = Map.values(cards_per_suit)
+		# Return true if any suit has a frequency equal to (or greater than) 4
+		Enum.any?(frequency_list, fn(elem) -> 
+			elem >= 4
+		end)
+	end
+
 end
 # [1, 2, :a, 2, :a, :b, :a] |> Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) |>  Enum.sort()
 # Main array passed into function
