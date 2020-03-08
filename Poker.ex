@@ -178,6 +178,27 @@ defmodule Poker do
 		end)
 	end
 
+	# Determine if a given hand is a Full House
+	# Poker.is_full_house?([{9, "C"}, {9, "D"}, {9, "H"}, {4, "S"}, {4, "C"}])
+	# Poker.is_full_house?([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	# Poker.is_full_house?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	def is_full_house?(list) do
+		# Determine the number of cards (that exist) for each rank
+		frequency_per_rank = number_of_cards_per_rank(list)
+		# Get a List containing the frequency of each rank
+		frequency_list = Map.values(frequency_per_rank)
+
+		# Return true if one rank has a frequency of 3
+		has_three = Enum.any?(frequency_list, fn(elem) -> elem == 3 end)
+		# Return true if one rank has a frequency of 2
+		has_two = Enum.any?(frequency_list, fn(elem) -> elem == 2 end)
+		
+		# Return true if both cases are true
+		has_three and has_two
+	end
+
+
+
 end
 # [1, 2, :a, 2, :a, :b, :a] |> Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) |>  Enum.sort()
 # Main array passed into function
