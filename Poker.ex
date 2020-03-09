@@ -168,17 +168,12 @@ defmodule Poker do
 					result = tie_four_of_kind(first_hand, second_hand)
 					result(first_hand, second_hand, result)
 				else
-					result = do_tie_cond(first_hand, second_hand)
-					if result == true do
-						convert_to_output(first_hand)
-						#IO.puts("First_hand")
-					else 
-						if result == false do
-							convert_to_output(second_hand)
-							#IO.puts("Second_hand")
-						else
-							IO.puts("Identical hands")
-						end
+					if first_hand_rank_category == 4 || first_hand_rank_category == 7 do
+						result = tie_full_house(first_hand, second_hand)
+						result(first_hand, second_hand, result)
+					else
+						result = do_tie_cond(first_hand, second_hand)
+						result(first_hand, second_hand, result)
 					end
 				end
 			end
@@ -194,6 +189,25 @@ defmodule Poker do
 				#IO.puts("Second_hand")
 			else
 				IO.puts("Identical hands")
+			end
+		end
+	end
+
+	#Poker.deal([8,9,21,22,34,35,4,1,17,2]) 	Result: First wins as full house > three of a kind
+	#Poker.deal([1,2,14,15,27,28,5,1,18,14])	Result:
+	def tie_full_house(first,second) do
+		f1 = number_of_cards_per_rank(first) |> Enum.filter(fn({rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
+		f2 = number_of_cards_per_rank(second) |> Enum.filter(fn({rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
+		l1 =  Enum.zip(first, second) |> Enum.all?(fn {x,y} -> x > y end)
+		if l1 == true do
+			#IO.puts("First")
+			l1
+		else
+			if l1 == false do
+				#IO.puts("Second")
+				l1
+			else
+				nil
 			end
 		end
 	end
