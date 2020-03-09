@@ -67,6 +67,9 @@ defmodule Poker do
 
 	# Poker.deal([1,14,13,15,12,16,11,17,10,18])		Result: 1st Hand Wins (using a Royal Flush)
 	# Poker.deal([1,14,2,15,3,16,4,17,5,18])			Result: Both Straight Flush
+	# Poker.deal([29,42,44,4,5,5,6,45,9,9])				Result: First hand wins w/rank 5S > 4C
+	# Poker.deal([29,42,4,4,5,5,6,45,8,8])				Result: Second hand wins w/suit 3S > 3H
+
 	def deal(list) do
 		# Convert each card into the following foramt: {<rank>, <suit>}
 		converted_list = convert(list)
@@ -90,15 +93,29 @@ defmodule Poker do
 			# Manage the situtation where: both hands have the same "rank category"
 			# e.g. both hands are a Straight Flush
 			first_hand_rank_category == second_hand_rank_category ->
-				IO.puts("This case has not been handled.")
+				# IO.puts("This case has not been handled.")
+				if do_tie_cond(first_hand, second_hand) == true do
+					convert_to_output(first_hand)
+					#IO.puts("First_hand")
+				else 
+					convert_to_output(second_hand)
+					#IO.puts("Second_hand")
+				end
 		end
-
-		# second = Enum.filter(temp, fn{x,_y} -> (rem x, 2) == 0 end) |> convert()
-		# first = Enum.filter(temp, fn{x,_y} -> (rem x, 2) != 0 end) |> convert()
-		#v1 = hand_rank(first)
-		#v2 = hand_rank(second)
 	end
 
+  	def do_tie_cond(first, second) do
+		combined = Enum.zip(first, second)
+		rank = Enum.any?(combined,fn {{r1, s1}, {r2, s2}} -> r1 > r2 end)
+		 if rank == false do
+		 	Enum.any?(combined,fn {{r1, s1}, {r2, s2}} -> s1 > s2 end)
+		 else
+		 	rank
+		 end
+  	end
+	#def do_tie_cond(first, second) do
+	#	 Enum.zip(first, second) |> Enum.any?(fn {{r1, _s1}, {r2, _s2}} -> r1 < r2 end)
+	#end
 	# Return a number between 1-10 that dictates the "ranking category" of the given hand.
 	# A lower "ranking category" (e.g. 1) is always better than a higher "ranking category" (e.g. 5)
 	def rank_hand(hand) do
