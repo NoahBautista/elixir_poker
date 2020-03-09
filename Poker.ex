@@ -68,7 +68,8 @@ defmodule Poker do
 	# Poker.deal([1,14,13,15,12,16,11,17,10,18])		Result: 1st Hand Wins (using a Royal Flush)
 	# Poker.deal([1,14,2,15,3,16,4,17,5,18])			Result: Both Straight Flush
 	# Poker.deal([29,42,44,4,5,5,6,45,9,9])				Result: First hand wins w/rank 5S > 4C
-	# Poker.deal([29,42,4,4,5,5,6,45,8,8])				Result: Second hand wins w/suit 3S > 3H
+	# Poker.deal([29,42,4,44,5,5,6,45,9,9])				Result: Second hand wins w/rank 5S > 4C
+	# Poker.deal([1,5,2,4,3,3,4,2,5,1]) 				Result: Identitcal hands 
 
 	def deal(list) do
 		# Convert each card into the following foramt: {<rank>, <suit>}
@@ -98,17 +99,30 @@ defmodule Poker do
 					convert_to_output(first_hand)
 					#IO.puts("First_hand")
 				else 
-					convert_to_output(second_hand)
-					#IO.puts("Second_hand")
+					if do_tie_cond(first_hand, second_hand) == false do
+						convert_to_output(second_hand)
+						#IO.puts("Second_hand")
+					else
+						IO.puts("Identical hands")
+					end
+
 				end
 		end
 	end
 
   	def do_tie_cond(first, second) do
 		combined = Enum.zip(first, second)
+		# is false if r1 == r2 or r2 is always less than r1
 		rank = Enum.any?(combined,fn {{r1, _s1}, {r2, _s2}} -> r1 > r2 end)
-		 if rank == false do
-		 	Enum.any?(combined,fn {{_r1, s1}, {_r2, s2}} -> s1 > s2 end)
+		e1 = Enum.all?(combined,fn {{r1, _s1}, {r2, _s2}} -> r1 == r2 end)
+		 if rank == false and e1 == true do
+		 	suit = Enum.any?(combined,fn {{_ßr1, s1}, {_r2, s2}} -> s1 > s2 end)
+		 	e2 = Enum.all?(combined,fn {{_ßr1, s1}, {_r2, s2}} -> s1 == s2 end)
+		 	if suit == false and e2 == true do
+		 		nil
+		 	else
+		 		suit
+		 	end 
 		 else
 		 	rank
 		 end
