@@ -1,6 +1,8 @@
 
 defmodule Poker do
 
+	# clear && c("Poker.ex") && clear 
+
 	@card_map %{
 		# Clubs
 		1 => {1, "C"},		# Ace
@@ -70,6 +72,70 @@ defmodule Poker do
 	# Poker.deal([29,42,44,4,5,5,6,45,9,9])				Result: First hand wins w/rank 5S > 4C
 	# Poker.deal([29,42,4,44,5,5,6,45,9,9])				Result: Second hand wins w/rank 5S > 4C
 	# Poker.deal([1,5,2,4,3,3,4,2,5,1]) 				Result: Identitcal hands 
+
+	# Poker.deal([1,1,2,2,3,3,4,4,5,5])				Result: Seco
+
+	# Makes testing easier:
+	# Try: Poker.test_deal(["AC","JC","QC","KC"]) 
+	def test_deal(list) do
+
+		# Convert to uppercase "qc" to "QC"
+		# FYI: "qc" is a Queen of Clubs
+		list = Enum.map(list, fn(elem) ->
+			# Convert to uppercase
+			_string_representation_of_card = String.upcase(elem)
+		end)
+
+		# Convert "QC" to "12C"
+		list = Enum.map(list, fn(uppercase_card) ->
+			# Retrieve the rank of the card
+			rank_string = String.at(uppercase_card, 0)
+			# Retrieve the suit of the card
+			suit = String.at(uppercase_card, 1)
+			# Replace "A", "J", "Q" and "K" to their number representations
+			cond do
+				rank_string == "A" ->
+					number_representation_of_rank = "1"
+					"#{number_representation_of_rank}#{suit}"
+
+				rank_string == "J" ->
+					number_representation_of_rank = "11"
+					"#{number_representation_of_rank}#{suit}"
+
+				rank_string == "Q" ->
+					number_representation_of_rank = "12"
+					"#{number_representation_of_rank}#{suit}"
+
+				rank_string == "K" ->
+					number_representation_of_rank = "13"
+					"#{number_representation_of_rank}#{suit}"
+			end
+		end)
+
+		# Convert "12C" to 12.
+		list = Enum.map(list, fn(card) ->
+			
+			# Retreive the rank (e.g. "12") and suit (i.e. "C") seperately
+			list_of_captures = Regex.run(~r/^(\d+)([a-zA-Z]+)/, card)
+			# Extract the rank from the list
+			rank_string = Enum.at(list_of_captures, 1)
+			rank = String.to_integer(rank_string)
+			# Extract the suit from the list
+			suit_string = Enum.at(list_of_captures, 2)
+
+			# Return the integer representation of the card
+			cond do
+				suit_string == "C" ->
+					rank + 0
+				suit_string == "D" ->
+					rank + 13
+				suit_string == "H" ->
+					rank + 26
+				suit_string == "S" ->
+					rank + 39
+			end
+		end)
+	end
 
 	def deal(list) do
 		# Convert each card into the following foramt: {<rank>, <suit>}
