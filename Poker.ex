@@ -164,18 +164,40 @@ defmodule Poker do
 			# e.g. both hands are a Straight Flush
 			first_hand_rank_category == second_hand_rank_category ->
 				# IO.puts("This case has not been handled.")
-				if do_tie_cond(first_hand, second_hand) == true do
-					convert_to_output(first_hand)
-					#IO.puts("First_hand")
-				else 
-					if do_tie_cond(first_hand, second_hand) == false do
-						convert_to_output(second_hand)
-						#IO.puts("Second_hand")
-					else
-						IO.puts("Identical hands")
+				if first_hand_rank_category == 3 do
+					tie_four_of_kind(first_hand, second_hand)
+				else
+					result = do_tie_cond(first_hand, second_hand)
+					if result == true do
+						convert_to_output(first_hand)
+						#IO.puts("First_hand")
+					else 
+						if result == false do
+							convert_to_output(second_hand)
+							#IO.puts("Second_hand")
+						else
+							IO.puts("Identical hands")
+						end
 					end
-
 				end
+			end
+	end
+
+
+	def tie_four_of_kind(first, second) do
+		first = number_of_cards_per_rank(first) |> Enum.filter(fn({rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
+		second = number_of_cards_per_rank(second) |> Enum.filter(fn({rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
+		l1 =  Enum.zip(first, second) |> Enum.any?(fn {x,y} -> x > y end)
+		if l1 == true do
+			#IO.puts("First")
+			l1
+		else
+			if l1 == false do
+				#IO.puts("Second")
+				l1
+			else
+				nil
+			end
 		end
 	end
 
