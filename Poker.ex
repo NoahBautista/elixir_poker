@@ -106,9 +106,9 @@ defmodule Poker do
 
   	def do_tie_cond(first, second) do
 		combined = Enum.zip(first, second)
-		rank = Enum.any?(combined,fn {{r1, s1}, {r2, s2}} -> r1 > r2 end)
+		rank = Enum.any?(combined,fn {{r1, _s1}, {r2, _s2}} -> r1 > r2 end)
 		 if rank == false do
-		 	Enum.any?(combined,fn {{r1, s1}, {r2, s2}} -> s1 > s2 end)
+		 	Enum.any?(combined,fn {{_r1, s1}, {_r2, s2}} -> s1 > s2 end)
 		 else
 		 	rank
 		 end
