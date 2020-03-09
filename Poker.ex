@@ -65,62 +65,38 @@ defmodule Poker do
 		@card_map
 	end
 
-	# Poker.deal([1,14,2,15,3,16,4,17,5,18])
+	# Poker.deal([1,14,13,15,12,16,11,17,10,18])		Result: 1st Hand Wins (using a Royal Flush)
+	# Poker.deal([1,14,2,15,3,16,4,17,5,18])			Result: Both Straight Flush
 	def deal(list) do
-		temp = Enum.zip(1..10, list) 
-		# @noah – Consider using Enum.drop_every(numerable, nth)
-		# See: https://hexdocs.pm/elixir/Enum.html#drop_every/2
-		# Ex:
-		second = Enum.drop_every(list, 2) |> convert |> sort_by_rank
-		first = (list -- second) |> convert |> sort_by_rank
+		# Convert each card into the following foramt: {<rank>, <suit>}
+		converted_list = convert(list)
+		# Retrieve all the cards that should be allocated to the 2nd hand
+		second_hand = Enum.drop_every(converted_list, 2) |> sort_by_rank
+		# Retrieve all the cards that should be allocated to the 1st hand
+		first_hand = (converted_list -- second_hand) |> sort_by_rank
 
+		# Determine the rank of each hand
+		{first_hand_rank_category, _} = rank_hand(first_hand)
+		{second_hand_rank_category, _} = rank_hand(second_hand)
+
+		# Compare the "rank category" of each hand
+		cond do
+			# Manage the situtation where: the 1st hand has a higher "rank category"
+			first_hand_rank_category < second_hand_rank_category ->
+				convert_to_output(first_hand)
+			# Manage the situtation where: the 2nd hand has a higher "rank category"
+			second_hand_rank_category < first_hand_rank_category ->
+				convert_to_output(second_hand)
+			# Manage the situtation where: both hands have the same "rank category"
+			# e.g. both hands are a Straight Flush
+			first_hand_rank_category == second_hand_rank_category ->
+				IO.puts("This case has not been handled.")
+		end
 
 		# second = Enum.filter(temp, fn{x,_y} -> (rem x, 2) == 0 end) |> convert()
 		# first = Enum.filter(temp, fn{x,_y} -> (rem x, 2) != 0 end) |> convert()
 		#v1 = hand_rank(first)
 		#v2 = hand_rank(second)
-
-		f2 = (
-			if is_royal_flush?(second) do
-				1
-			else
-				if is_straight_flush?(second) do
-					2
-				else		
-					if is_four_of_a_kind?(second) do
-						3
-					else
-						if is_full_house?(second) do
-							4
-						else		
-							if is_flush?(second) do
-								5
-							else
-								if is_straight?(second) do
-									6
-								else
-									if is_three_of_a_kind?(second) do
-										7
-									else
-										if is_two_pairs?(second) do
-											8
-										else
-											if is_one_pair?(second) do
-												9
-											else
-												#none of the other options
-												10
-											end
-										end
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		)
-		# second
 	end
 
 	# Return a number between 1-10 that dictates the "ranking category" of the given hand.
