@@ -150,12 +150,38 @@ defmodule Poker do
 		end
 	end
 
-	def sort_by_rank(list) do
+	# Convert hand to output version
+	# Poker.convert_to_output([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	def convert_to_output(hand) do
+		# Sort the hand in ascending order
+		sorted_hand = sort_by_rank_asc(hand)
+		# Convert each Tuple using the following String format: "<rank><suit>"
+		output_list = Enum.map(sorted_hand, fn(tup) ->
+			{rank, suit} = tup
+			# Convert the rank (in the tuple) to a String
+			rank_string = Integer.to_string(rank)
+			# Use string interpolation to achieve the given format
+			"#{rank_string}#{suit}"
+		end)
+	end
+
+
 	# Sort the converted list-of-tuples base on their rank - Desc order
+	def sort_by_rank(list) do
 		Enum.sort(list, fn (a, b) -> 
 			{a_rank, _} = a
 			{b_rank, _} = b
 			a_rank >= b_rank
+		 end)
+	end
+
+	# Sort the converted list-of-tuples base on their rank - Asc order
+	# Poker.sort_by_rank_asc([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	def sort_by_rank_asc(list) do
+		Enum.sort(list, fn (a, b) -> 
+			{a_rank, _} = a
+			{b_rank, _} = b
+			a_rank <= b_rank
 		 end)
 	end
 
