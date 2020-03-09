@@ -65,14 +65,14 @@ defmodule Poker do
 		@card_map
 	end
 
-	# Poker.deal([1,52,20,48,52,50,31,49,51,39])
+	# Poker.deal([1,14,2,15,3,16,4,17,5,18])
 	def deal(list) do
 		temp = Enum.zip(1..10, list) 
 		# @noah – Consider using Enum.drop_every(numerable, nth)
 		# See: https://hexdocs.pm/elixir/Enum.html#drop_every/2
 		# Ex:
 		second = Enum.drop_every(list, 2) |> convert |> sort_by_rank
-		first = list -- second |> convert |> sort_by_rank
+		first = (list -- second) |> convert |> sort_by_rank
 
 
 		# second = Enum.filter(temp, fn{x,_y} -> (rem x, 2) == 0 end) |> convert()
@@ -81,10 +81,10 @@ defmodule Poker do
 		#v2 = hand_rank(second)
 
 		f2 = (
-			if is_RoyalFlush?(second) do
+			if is_royal_flush?(second) do
 				1
 			else
-				if is_straightFlush?(second) do
+				if is_straight_flush?(second) do
 					2
 				else		
 					if is_four_of_a_kind?(second) do
@@ -179,9 +179,9 @@ defmodule Poker do
 	end
 
 	# Determine if a given hand is a Royal Flush 
-	# Poker.is_RoyalFlush([{1, "S"}, {10,"S"}, {11,"S"}, {12,"S"}, {13,"S"}])
-	# Poker.is_RoyalFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
-	def is_RoyalFlush?(list) do
+	# Poker.is_royal_flush?([{1, "S"}, {10,"S"}, {11,"S"}, {12,"S"}, {13,"S"}])
+	# Poker.is_royal_flush?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	def is_royal_flush?(list) do
 		type = elem((hd list), 1) 
 		Enum.all?(list, fn({_x,y}) -> y == type end) and Enum.any?(list, fn({x,_y}) -> x == 13 end) and
 		Enum.any?(list, fn({x,_y}) -> x == 12 end) and Enum.any?(list, fn({x,_y}) -> x == 11 end) and
@@ -189,9 +189,9 @@ defmodule Poker do
 	end
 
 	# Determine if a given hand is a Straight Flush 
-	# Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {46,"S"}])
-	# Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
-	def is_straightFlush?(list) do
+	# Poker.is_straight_flush?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {46,"S"}])
+	# Poker.is_straight_flush?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	def is_straight_flush?(list) do
 		type = elem((hd list), 1) 
 		rank = elem((hd list), 0)
 		Enum.all?(list, fn({_x,y}) -> y == type end) and Enum.any?(list, fn({x,_y}) -> x == rank end) and
