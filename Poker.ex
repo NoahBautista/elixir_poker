@@ -123,6 +123,33 @@ defmodule Poker do
 		# second
 	end
 
+	# Return a number between 1-10 that dictates the "ranking category" of the given hand.
+	# A lower "ranking category" (e.g. 1) is always better than a higher "ranking category" (e.g. 5)
+	def rank_hand(hand) do
+		cond do
+			is_royal_flush?(hand) == true ->
+				{1, hand}
+			is_straight_flush?(hand) == true ->
+				{2, hand}
+			is_four_of_a_kind?(hand) == true ->
+				{3, hand}
+			is_full_house?(hand) == true ->
+				{4, hand}
+			is_flush?(hand) == true ->
+				{5, hand}
+			is_straight?(hand) == true ->
+				{6, hand}
+			is_three_of_a_kind?(hand) == true ->
+				{7, hand}
+			is_two_pairs?(hand) == true ->
+				{8, hand}
+			is_one_pair?(hand) == true ->
+				{9, hand}
+			true == true ->
+				{10, hand}
+		end
+	end
+
 	def sort_by_rank(list) do
 	# Sort the converted list-of-tuples base on their rank - Desc order
 		Enum.sort(list, fn (a, b) -> 
