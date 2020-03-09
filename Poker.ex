@@ -315,6 +315,10 @@ defmodule Poker do
 		length_of_two_list == 2
 	end
 
+	# Determine if a given hand is a Pair (i.e. only has one pair of matching-rank cards)
+	# Poker.is_one_pair?([{9, "C"}, {9, "D"}, {2, "H"}, {3, "S"}, {4, "C"}])
+	# Poker.is_one_pair?([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	# Poker.is_one_pair?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
 	def is_one_pair?(list) do
 		# Determine the number of cards (that exist) for each rank
 		cards_per_rank = number_of_cards_per_rank(list)
