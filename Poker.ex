@@ -165,7 +165,8 @@ defmodule Poker do
 			first_hand_rank_category == second_hand_rank_category ->
 				# IO.puts("This case has not been handled.")
 				if first_hand_rank_category == 3 do
-					tie_four_of_kind(first_hand, second_hand)
+					result = tie_four_of_kind(first_hand, second_hand)
+					result(first_hand, second_hand, result)
 				else
 					result = do_tie_cond(first_hand, second_hand)
 					if result == true do
@@ -182,7 +183,20 @@ defmodule Poker do
 				end
 			end
 	end
-
+	# Poker.test_deal(["2C","3C","2D","3D","2H","3H","2S","3S","KS","QS"])
+	def result(first, second, result) do
+		if result == true do
+			convert_to_output(first)
+			#IO.puts("First_hand")
+		else 
+			if result == false do
+				convert_to_output(second)
+				#IO.puts("Second_hand")
+			else
+				IO.puts("Identical hands")
+			end
+		end
+	end
 
 	def tie_four_of_kind(first, second) do
 		first = number_of_cards_per_rank(first) |> Enum.filter(fn({rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
