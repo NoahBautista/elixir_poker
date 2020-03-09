@@ -76,7 +76,7 @@ defmodule Poker do
 	# Poker.deal([1,1,2,2,3,3,4,4,5,5])				Result: Seco
 
 	# Makes testing easier:
-	# Try: Poker.test_deal(["AC","JC","QC","KC"]) 
+	# Try: Poker.test_deal(["AC","JC","QC","KC" ...... ]) 
 	def test_deal(list) do
 
 		# Convert to uppercase "qc" to "QC"
@@ -135,6 +135,9 @@ defmodule Poker do
 					rank + 39
 			end
 		end)
+
+		# Call the 'deal' function
+		deal(list)
 	end
 
 	def deal(list) do
