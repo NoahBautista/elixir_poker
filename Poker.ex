@@ -226,15 +226,8 @@ defmodule Poker do
 		Enum.any?(list, fn({x,_y}) -> x == (rank-3) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-4) end) 
 	end
 
-	def is_straight?(list) do
-		rank = elem((hd list), 0)
-		Enum.any?(list, fn({x,_y}) -> x == rank end) and
-		Enum.any?(list, fn({x,_y}) -> x == (rank-1) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-2) end) and
-		Enum.any?(list, fn({x,_y}) -> x == (rank-3) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-4) end) 
-	end
-
 	# Determine if a given hand is a Four Of A Kind
-	# Poker.is_four_of_a_kind?([{1, "S"}, {8, "S"}, {11, "S"}, {13, "S"}, {1, "C"}])
+	# Poker.is_four_of_a_kind?([{1, "C"}, {1, "D"}, {1, "H"}, {1, "S"}, {2, "C"}])
 	# Poker.is_four_of_a_kind?([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
 	# Poker.is_four_of_a_kind?([{1, "C"}, {2, "D"}, {3, "H"}, {4, "S"}])
 	def is_four_of_a_kind?(list) do
@@ -279,6 +272,15 @@ defmodule Poker do
 
 		# Return true if one suit has a frequency of 5
 		_has_five = Enum.any?(frequency_list, fn(elem) -> elem == 5 end)
+	end
+
+	# Determine if a given hand is a Straight
+	# Poker.is_straight?([{9, "S"}, {8,"C"}, {7,"D"}, {6,"H"}, {5,"S"}])
+	def is_straight?(list) do
+		rank = elem((hd list), 0)
+		Enum.any?(list, fn({x,_y}) -> x == rank end) and
+		Enum.any?(list, fn({x,_y}) -> x == (rank-1) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-2) end) and
+		Enum.any?(list, fn({x,_y}) -> x == (rank-3) end) and Enum.any?(list, fn({x,_y}) -> x == (rank-4) end) 
 	end
 
 	# Determine if a given hand is a Three Of A Kind
@@ -326,6 +328,7 @@ defmodule Poker do
 		# Return true if the length of the List is 2
 		length_of_two_list == 1
 	end
+
 end
 # [1, 2, :a, 2, :a, :b, :a] |> Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) |>  Enum.sort()
 # Main array passed into function
