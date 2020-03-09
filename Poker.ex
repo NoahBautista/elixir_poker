@@ -178,6 +178,9 @@ defmodule Poker do
 		Enum.map(list, fn y -> @card_map[y] end)
 	end
 
+	# Determine if a given hand is a Royal Flush 
+	# Poker.is_RoyalFlush([{1, "S"}, {10,"S"}, {11,"S"}, {12,"S"}, {13,"S"}])
+	# Poker.is_RoyalFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
 	def is_RoyalFlush?(list) do
 		type = elem((hd list), 1) 
 		Enum.all?(list, fn({_x,y}) -> y == type end) and Enum.any?(list, fn({x,_y}) -> x == 13 end) and
@@ -185,8 +188,9 @@ defmodule Poker do
 		Enum.any?(list, fn({x,_y}) -> x == 10 end) and Enum.any?(list, fn({x,_y}) -> x == 1 end)
 	end
 
-	#  Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {46,"S"}])
-	#  Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
+	# Determine if a given hand is a Straight Flush 
+	# Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {46,"S"}])
+	# Poker.is_straightFlush([{50, "S"}, {49,"S"}, {48,"S"}, {47,"S"}, {45,"S"}])
 	def is_straightFlush?(list) do
 		type = elem((hd list), 1) 
 		rank = elem((hd list), 0)
@@ -248,7 +252,6 @@ defmodule Poker do
 
 		# Return true if one suit has a frequency of 5
 		_has_five = Enum.any?(frequency_list, fn(elem) -> elem == 5 end)
-		Enum
 	end
 
 	# Determine if a given hand is a Three Of A Kind
@@ -278,6 +281,7 @@ defmodule Poker do
 		two_list = Enum.filter(frequency_list, fn(elem) -> elem == 2 end)
 		# Determine the length of the List
 		length_of_two_list = Enum.count(two_list)
+
 		# Return true if the length of the List is 2
 		length_of_two_list == 2
 	end
