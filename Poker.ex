@@ -611,8 +611,3 @@ defmodule Poker do
 	end
 
 end
-# [1, 2, :a, 2, :a, :b, :a] |> Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end) |>  Enum.sort()
-# Main array passed into function
-# 	1) Seperate into two different arrays, evens - odds
-#   2) Use map to convert cards in int to string format
-#	3)
