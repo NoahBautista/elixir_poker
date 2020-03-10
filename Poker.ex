@@ -206,7 +206,9 @@ defmodule Poker do
 						result(first_hand, second_hand, result)
 
 					# Manage the situation where: both hands are a Pair
-					# first_hand_rank_category == 9 ->
+					first_hand_rank_category == 9 ->
+						result = tie_one_pair(first_hand, second_hand)
+						result(first_hand, second_hand, result)
 
 					# Manage the situation where: both hands are a High Card
 					first_hand_rank_category == 10 ->
@@ -340,6 +342,41 @@ defmodule Poker do
 						end
 				end
 		end
+	end
+
+	# Poker.test_deal(["JD","JC","JS","JS","AS","AD","9C","8H","3C","7H"])
+	def tie_one_pair(first_hand, second_hand) do
+		# FIXME - Remove this before committing this
+		IO.puts "Inside tie_one_pair ... yay"
+
+		first = number_of_cards_per_rank(first_hand) |> Enum.filter(fn({_rank, freq}) -> freq == 2 end) |> sort_by_rank
+		second = number_of_cards_per_rank(second_hand) |> Enum.filter(fn({_rank, freq}) -> freq == 2 end) |> sort_by_rank
+
+		# Retrieve the 1st highest rank of the first hand
+		{first_highest_rank_of_the_first_hand, _} = Enum.fetch(first, 0) |> elem(1)
+		# FIXME - Remove this before committing this
+		IO.puts "first_highest_rank_of_the_first_hand=#{first_highest_rank_of_the_first_hand}"
+		# Retrieve the 1st highest rank of the second hand
+		{first_highest_rank_of_the_second_hand, _} = Enum.fetch(second, 0) |> elem(1)
+		# FIXME - Remove this before committing this
+		IO.puts "first_highest_rank_of_the_second_hand=#{first_highest_rank_of_the_second_hand}"
+
+		# Determine which hand is the highest (by comparing the 1st highest ranking pair)
+		cond do
+			# Manage the situation where: the first hand has a higher ranking pair
+			first_highest_rank_of_the_first_hand > first_highest_rank_of_the_second_hand ->
+				true
+			# Manage the situation where: the second hand has a higher ranking pair
+			first_highest_rank_of_the_first_hand < first_highest_rank_of_the_second_hand ->
+				false
+			# Manage the situation fwhere: the first and second hand's highest pair are equivalent
+			first_highest_rank_of_the_first_hand == first_highest_rank_of_the_second_hand ->
+				# Remove the Pair from each hand
+				first_hand_without_the_pair = Enum.reject(first_hand, fn({rank, _suit}) -> rank == first_highest_rank_of_the_first_hand end)
+				second_hand_without_the_pair = Enum.reject(second_hand, fn({rank, _suit}) -> rank == first_highest_rank_of_the_second_hand end)
+				do_tie_cond(first_hand_without_the_pair, second_hand_without_the_pair)
+		end
+
 	end
 
 
