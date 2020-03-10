@@ -94,21 +94,29 @@ defmodule Poker do
 			suit = String.at(uppercase_card, 1)
 			# Replace "A", "J", "Q" and "K" to their number representations
 			cond do
+				# Manage the situation where: the rank is an "A" (Ace)
 				rank_string == "A" ->
 					number_representation_of_rank = "1"
 					"#{number_representation_of_rank}#{suit}"
 
+				# Manage the situation where: the rank is an "J" (Jack)
 				rank_string == "J" ->
 					number_representation_of_rank = "11"
 					"#{number_representation_of_rank}#{suit}"
 
+				# Manage the situation where: the rank is an "Q" (Queen)
 				rank_string == "Q" ->
 					number_representation_of_rank = "12"
 					"#{number_representation_of_rank}#{suit}"
 
+				# Manage the situation where: the rank is an "K" (King)
 				rank_string == "K" ->
 					number_representation_of_rank = "13"
 					"#{number_representation_of_rank}#{suit}"
+
+				# Manage the situation where: the rank a number between (and including) 2 and 10
+				2 <= String.to_integer(rank_string) and String.to_integer(rank_string) <= 10 -> 
+					"#{rank_string}#{suit}"
 			end
 		end)
 
@@ -178,6 +186,7 @@ defmodule Poker do
 				end
 			end
 	end
+	
 	# Poker.test_deal(["2C","3C","2D","3D","2H","3H","2S","3S","KS","QS"])
 	def result(first, second, result) do
 		if result == true do
