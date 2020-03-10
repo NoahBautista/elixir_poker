@@ -1,5 +1,5 @@
 # Ishak Ahmed - 500576186
-# Noah Bautista - [ADD_STUDENT_NUMBER_HERE]
+# Noah Bautista - 500817100
 
 defmodule Poker do
 
