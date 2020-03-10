@@ -224,11 +224,9 @@ defmodule Poker do
 	def result(first, second, result) do
 		if result == true do
 			convert_to_output(first)
-			#IO.puts("First_hand")
 		else 
 			if result == false do
 				convert_to_output(second)
-				#IO.puts("Second_hand")
 			else
 				IO.puts("Identical hands")
 			end
@@ -243,11 +241,9 @@ defmodule Poker do
 		f2 = number_of_cards_per_rank(second) |> Enum.filter(fn({rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
 		l1 =  Enum.zip(first, second) |> Enum.all?(fn {x,y} -> x > y end)
 		if l1 == true do
-			#IO.puts("First")
 			l1
 		else
 			if l1 == false do
-				#IO.puts("Second")
 				l1
 			else
 				nil
@@ -262,11 +258,9 @@ defmodule Poker do
 		second = number_of_cards_per_rank(second) |> Enum.filter(fn({rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
 		l1 =  Enum.zip(first, second) |> Enum.any?(fn {x,y} -> x > y end)
 		if l1 == true do
-			#IO.puts("First")
 			l1
 		else
 			if l1 == false do
-				#IO.puts("Second")
 				l1
 			else
 				nil
