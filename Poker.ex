@@ -130,7 +130,7 @@ defmodule Poker do
 		end)
 
 		# Convert "12C" to 12.
-		list = Enum.map(list, fn(card) ->
+		_list = Enum.map(list, fn(card) ->
 			
 			# Retreive the rank (e.g. "12") and suit (i.e. "C") seperately
 			list_of_captures = Regex.run(~r/^([A\dJQK]+)([a-zA-Z]+)/, card)
@@ -237,8 +237,8 @@ defmodule Poker do
 	#Poker.deal([1,2,14,15,27,28,5,1,18,14])	Result:
 	def tie_full_house(first,second) do
 
-		f1 = number_of_cards_per_rank(first) |> Enum.filter(fn({rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
-		f2 = number_of_cards_per_rank(second) |> Enum.filter(fn({rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
+		_f1 = number_of_cards_per_rank(first) |> Enum.filter(fn({_rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
+		_f2 = number_of_cards_per_rank(second) |> Enum.filter(fn({_rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
 		l1 =  Enum.zip(first, second) |> Enum.all?(fn {x,y} -> x > y end)
 		if l1 == true do
 			l1
@@ -254,8 +254,8 @@ defmodule Poker do
 	# Poker.test_deal(["2C","3C","2D","3D","2H","3H","2S","3S","KS","QS"])
 	def tie_four_of_kind(first, second) do
 
-		first = number_of_cards_per_rank(first) |> Enum.filter(fn({rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
-		second = number_of_cards_per_rank(second) |> Enum.filter(fn({rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
+		first = number_of_cards_per_rank(first) |> Enum.filter(fn({_rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
+		second = number_of_cards_per_rank(second) |> Enum.filter(fn({_rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
 		l1 =  Enum.zip(first, second) |> Enum.any?(fn {x,y} -> x > y end)
 		if l1 == true do
 			l1
@@ -396,7 +396,7 @@ defmodule Poker do
 				{8, hand}
 			is_one_pair?(hand) == true ->
 				{9, hand}
-			true == true ->
+			true ->
 				{10, hand}
 		end
 	end
@@ -407,7 +407,7 @@ defmodule Poker do
 		# Sort the hand in ascending order
 		sorted_hand = sort_by_rank_asc(hand)
 		# Convert each Tuple using the following String format: "<rank><suit>"
-		output_list = Enum.map(sorted_hand, fn(tup) ->
+		_output_list = Enum.map(sorted_hand, fn(tup) ->
 			{rank, suit} = tup
 			# Convert the rank (in the tuple) to a String
 			rank_string = Integer.to_string(rank)
