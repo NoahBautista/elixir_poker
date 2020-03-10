@@ -73,8 +73,6 @@ defmodule Poker do
 	# Poker.deal([29,42,4,44,5,5,6,45,9,9])				Result: Second hand wins w/rank 5S > 4C
 	# Poker.deal([1,5,2,4,3,3,4,2,5,1]) 				Result: Identitcal hands 
 
-	# Poker.deal([1,1,2,2,3,3,4,4,5,5])					Result: Seco
-
 	# Makes testing easier:
 	# Try: Poker.test_deal(["AC","JC","QC","KC" ...... ]) 
 	def test_deal(list) do
@@ -102,9 +100,6 @@ defmodule Poker do
 			rank_string = Enum.at(list_of_captures, 1)
 			# Extract the suit from the list
 			suit = Enum.at(list_of_captures, 2)
-			
-			# FIXME - Remove this before committing this
-			# IO.puts "rank_string=#{rank_string}"
 
 			# Replace "A", "J", "Q" and "K" to their number representations
 			cond do
@@ -173,25 +168,23 @@ defmodule Poker do
 
 		# Compare the "rank category" of each hand
 		cond do
+
 			# Manage the situtation where: the 1st hand has a higher "rank category"
 			first_hand_rank_category < second_hand_rank_category ->
 				convert_to_output(first_hand)
+
 			# Manage the situtation where: the 2nd hand has a higher "rank category"
 			second_hand_rank_category < first_hand_rank_category ->
 				convert_to_output(second_hand)
+
 			# Manage the situtation where: both hands have the same "rank category"
 			# e.g. both hands are a Straight Flush
 			first_hand_rank_category == second_hand_rank_category ->
-				# FIXME - Remove this before committing this
-				IO.puts(first_hand_rank_category)
-				
 				# Determine the course of action based on the "rank category" 
 				# (of either hand since they are the same)
 				cond do
 					# Manage the situation where: both hands are a Four Of A Kind
 					first_hand_rank_category == 3 ->
-						# FIXME - Remove this before committing this
-						IO.puts "Inside IS THIS RUNNING? ... yay"
 						result = tie_four_of_kind(first_hand, second_hand)
 						result(first_hand, second_hand, result)
 
@@ -245,8 +238,6 @@ defmodule Poker do
 	#Poker.deal([8,9,21,22,34,35,4,1,17,2]) 	Result: First wins as full house > three of a kind
 	#Poker.deal([1,2,14,15,27,28,5,1,18,14])	Result:
 	def tie_full_house(first,second) do
-		# FIXME - Remove this before committing this
-		IO.puts "Inside tie_full_house ... yay"
 
 		f1 = number_of_cards_per_rank(first) |> Enum.filter(fn({rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
 		f2 = number_of_cards_per_rank(second) |> Enum.filter(fn({rank, freq}) -> freq == 3 end) |> Enum.map(fn {rank, _freq} -> rank end)
@@ -266,8 +257,6 @@ defmodule Poker do
 
 	# Poker.test_deal(["2C","3C","2D","3D","2H","3H","2S","3S","KS","QS"])
 	def tie_four_of_kind(first, second) do
-		# FIXME - Remove this before committing this
-		IO.puts "Inside tie_four_of_kind ... yay"
 
 		first = number_of_cards_per_rank(first) |> Enum.filter(fn({rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
 		second = number_of_cards_per_rank(second) |> Enum.filter(fn({rank, freq}) -> freq == 4 end) |> Enum.map(fn {rank, _freq} -> rank end)
@@ -288,20 +277,14 @@ defmodule Poker do
 
 	# Poker.test_deal(["10D","5C","10S","5S","2S","4D","2C","4H","KC","10H"])
 	def tie_two_pairs(first, second) do
-		# FIXME - Remove this before committing this
-		IO.puts "Inside tie_two_pairs ... yay"
 
 		first = number_of_cards_per_rank(first) |> Enum.filter(fn({_rank, freq}) -> freq == 2 end) |> sort_by_rank
 		second = number_of_cards_per_rank(second) |> Enum.filter(fn({_rank, freq}) -> freq == 2 end) |> sort_by_rank
 
 		# Retrieve the 1st highest rank of the first hand
 		{first_highest_rank_of_the_first_hand, _} = Enum.fetch(first, 0) |> elem(1)
-		# FIXME - Remove this before committing this
-		IO.puts "first_highest_rank_of_the_first_hand=#{first_highest_rank_of_the_first_hand}"
 		# Retrieve the 1st highest rank of the second hand
 		{first_highest_rank_of_the_second_hand, _} = Enum.fetch(second, 0) |> elem(1)
-		# FIXME - Remove this before committing this
-		IO.puts "first_highest_rank_of_the_second_hand=#{first_highest_rank_of_the_second_hand}"
 
 		# Determine which hand is the highest (by comparing the 1st highest ranking pair)
 		cond do
@@ -315,12 +298,8 @@ defmodule Poker do
 			first_highest_rank_of_the_first_hand == first_highest_rank_of_the_second_hand ->
 				# Retrieve the 2nd highest rank of the first hand
 				{second_highest_rank_of_the_first_hand, _} = Enum.fetch(first, 1) |> elem(1)
-				# FIXME - Remove this before committing this
-				IO.puts "second_highest_rank_of_the_first_hand=#{second_highest_rank_of_the_first_hand}"
 				# Retrieve the 2nd highest rank of the second hand
 				{second_highest_rank_of_the_second_hand, _} = Enum.fetch(second, 1) |> elem(1)
-				# FIXME - Remove this before committing this
-				IO.puts "second_highest_rank_of_the_second_hand=#{second_highest_rank_of_the_second_hand}"
 
 				# Determine which hand is the highest (by comparing the 2nd highest pair in each hand)
 				cond do
@@ -352,20 +331,14 @@ defmodule Poker do
 
 	# Poker.test_deal(["JD","JC","JS","JS","AS","AD","9C","8H","3C","7H"])
 	def tie_one_pair(first_hand, second_hand) do
-		# FIXME - Remove this before committing this
-		IO.puts "Inside tie_one_pair ... yay"
 
 		first = number_of_cards_per_rank(first_hand) |> Enum.filter(fn({_rank, freq}) -> freq == 2 end) |> sort_by_rank
 		second = number_of_cards_per_rank(second_hand) |> Enum.filter(fn({_rank, freq}) -> freq == 2 end) |> sort_by_rank
 
 		# Retrieve the 1st highest rank of the first hand
 		{first_highest_rank_of_the_first_hand, _} = Enum.fetch(first, 0) |> elem(1)
-		# FIXME - Remove this before committing this
-		IO.puts "first_highest_rank_of_the_first_hand=#{first_highest_rank_of_the_first_hand}"
 		# Retrieve the 1st highest rank of the second hand
 		{first_highest_rank_of_the_second_hand, _} = Enum.fetch(second, 0) |> elem(1)
-		# FIXME - Remove this before committing this
-		IO.puts "first_highest_rank_of_the_second_hand=#{first_highest_rank_of_the_second_hand}"
 
 		# Determine which hand is the highest (by comparing the 1st highest ranking pair)
 		cond do
@@ -388,9 +361,6 @@ defmodule Poker do
 
   	# Poker.test_deal(["KS","QS","6C","JD","5H","6C","3D","5H","2C","3C"])
   	def do_tie_cond(first, second) do
-  		# FIXME - Remove this before committing this
-		IO.puts "Inside do_tie_cond ... yay"
-
 		combined = Enum.zip(first, second)
 		# is false if r1 == r2 or r2 is always less than r1
 		rank = Enum.any?(combined,fn {{r1, _s1}, {r2, _s2}} -> r1 > r2 end)
