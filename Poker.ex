@@ -73,7 +73,7 @@ defmodule Poker do
 	# Poker.deal([29,42,4,44,5,5,6,45,9,9])				Result: Second hand wins w/rank 5S > 4C
 	# Poker.deal([1,5,2,4,3,3,4,2,5,1]) 				Result: Identitcal hands 
 
-	# Poker.deal([1,1,2,2,3,3,4,4,5,5])				Result: Seco
+	# Poker.deal([1,1,2,2,3,3,4,4,5,5])					Result: Seco
 
 	# Makes testing easier:
 	# Try: Poker.test_deal(["AC","JC","QC","KC" ...... ]) 
@@ -212,6 +212,12 @@ defmodule Poker do
 
 					# Manage the situation where: both hands are a High Card
 					first_hand_rank_category == 10 ->
+						result = do_tie_cond(first_hand, second_hand)
+						result(first_hand, second_hand, result)
+
+					# Manage the situation where: both hands are either 
+					# (1) Straight Flush (2) Flush (3) Straight
+					first_hand_rank_category == 2 || first_hand_rank_category == 5 || first_hand_rank_category == 6 ->
 						result = do_tie_cond(first_hand, second_hand)
 						result(first_hand, second_hand, result)
 				end
