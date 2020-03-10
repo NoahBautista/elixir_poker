@@ -1,7 +1,7 @@
+# Ishak Ahmed - 500576186
+# Noah Bautista - [ADD_STUDENT_NUMBER_HERE]
 
 defmodule Poker do
-
-	# clear && c("Poker.ex") && clear 
 
 	@card_map %{
 		# Clubs
