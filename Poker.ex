@@ -67,12 +67,6 @@ defmodule Poker do
 		@card_map
 	end
 
-	# Poker.deal([1,14,13,15,12,16,11,17,10,18])		Result: 1st Hand Wins (using a Royal Flush)
-	# Poker.deal([1,14,2,15,3,16,4,17,5,18])			Result: Both Straight Flush
-	# Poker.deal([29,42,44,4,5,5,6,45,9,9])				Result: First hand wins w/rank 5S > 4C
-	# Poker.deal([29,42,4,44,5,5,6,45,9,9])				Result: Second hand wins w/rank 5S > 4C
-	# Poker.deal([1,5,2,4,3,3,4,2,5,1]) 				Result: Identitcal hands 
-
 	# Makes testing easier:
 	# Try: Poker.test_deal(["AC","JC","QC","KC" ...... ]) 
 	def test_deal(list) do
@@ -154,6 +148,11 @@ defmodule Poker do
 		end)
 	end
 
+	# Poker.deal([1,14,13,15,12,16,11,17,10,18])		Result: 1st Hand Wins (using a Royal Flush)
+	# Poker.deal([1,14,2,15,3,16,4,17,5,18])			Result: Both Straight Flush
+	# Poker.deal([29,42,44,4,5,5,6,45,9,9])				Result: First hand wins w/rank 5S > 4C
+	# Poker.deal([29,42,4,44,5,5,6,45,9,9])				Result: Second hand wins w/rank 5S > 4C
+	# Poker.deal([1,5,2,4,3,3,4,2,5,1]) 				Result: Identitcal hands 
 	def deal(list) do
 		# Convert each card into the following foramt: {<rank>, <suit>}
 		converted_list = convert(list)
